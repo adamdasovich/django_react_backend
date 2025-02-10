@@ -83,4 +83,20 @@ class ClubViewset(viewsets.ViewSet):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
+    def retrieve(self, request, pk=None):
+        club = get_object_or_404(Club, pk=pk)
+        serializer = self.serializer_class(club)
+        return Response(serializer.data)
 
+    def update(self, request, pk=None):
+        club = get_object_or_404(Club, pk=pk)
+        serializer = self.serializer_class(club, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk=None):
+        club = get_object_or_404(Club, pk=pk)
+        club.delete()
+        return Response(status=204)
