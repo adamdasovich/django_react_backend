@@ -24,9 +24,8 @@ class CountryViewset(viewsets.ViewSet):
         return Response(serializer.errors, status=400)
     
     def retrieve(self, request, pk=None):
-        queryset = Country.objects.all()
-        country = get_object_or_404(queryset, pk=pk)
-        serializer = self.serializer_class(country)
+        clubs = Club.objects.filter(country_id=pk)
+        serializer = ClubSerializer(clubs, many=True)
         return Response(serializer.data)
     
     def update(self, request, pk=None):
